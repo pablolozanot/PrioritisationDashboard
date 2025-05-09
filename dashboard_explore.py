@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 
 @st.cache_data
 def load_data():
-    return pd.read_parquet("./indicators_time_series.parquet")
+    return pd.read_parquet("../data/output/indicators_time_series.parquet")
 
 df = load_data()
 
@@ -19,20 +19,21 @@ selected_indicator_1 = st.sidebar.selectbox("Indicator 1", indicators, index=0)
 selected_indicator_2 = st.sidebar.selectbox("Indicator 2", indicators, index=1 if len(indicators) > 1 else 0)
 
 # Metric toggles
-available_metrics = ['value', 'weighted_status', 'ema_status', 'weighted_heritage', 'trend', 'seasonal', 'resid']
+available_metrics = ['value', 'weighted_status', 'ema_status', 'weighted_heritage', 'smooth_status',  'seasonal','variability_status', 'resid']
+
 selected_metrics = st.sidebar.multiselect(
     "Select metrics to display",
     options=available_metrics,
-    default=['value', 'weighted_status', 'ema_status', 'trend']
+    default=['value', 'ema_status','variability_status', 'weighted_heritage','smooth_status']
 )
 
-# Define styles
 colors = {
     'value': 'black',
-    'weighted_status': '#e3120b',
-    'ema_status': '#1f77b4',
+    'weighted_status': '#FF5A5F',      
+    'ema_status': '#1877F2',           
     'weighted_heritage': '#999999',
-    'trend': '#2ca02c',
+    'smooth_status': '#1DB954',       
+    'variability_status': '#611f69',  
     'seasonal': '#ff7f0e',
     'resid': 'gray'
 }
@@ -47,7 +48,7 @@ def create_chart(df_filtered, title):
                 mode='markers' if metric == 'value' else 'lines',
                 name=metric.replace('_', ' ').title(),
                 line=dict(color=colors.get(metric, 'gray'), width=2,
-                          dash='dash' if metric in ['trend', 'seasonal'] else 'solid') if metric != 'value' else None,
+                          dash='dash' if metric in ['smooth_status', 'seasonal'] else 'solid') if metric != 'value' else None,
                 marker=dict(color='black') if metric == 'value' else None,
                 opacity=0.9 if metric != 'resid' else 0.4
             ))
