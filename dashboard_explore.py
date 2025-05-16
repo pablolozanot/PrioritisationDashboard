@@ -35,17 +35,18 @@ country_names = sorted(iso3_by_name.keys())
 # Detect metrics dynamically
 non_metrics = ['period', 'iso3', 'indicator_name', 'resid_spike']
 available_metrics = [col for col in df.columns if col not in non_metrics]
-default_metrics = [m for m in ['value', 'weighted_status', 'ema_status', 'trend'] if m in available_metrics]
+default_metrics = [m for m in ['value', 'Weighted Status', 'Variation (weighted) - Weighted Status'] if m in available_metrics]
 
 # Assign colors: fixed for key metrics, vibrant for others
 base_colors = {
     'value': 'black',
-    'weighted_status': '#e3120b',
-    'ema_status': '#1f77b4',
-    'weighted_heritage': '#999999',
-    'trend': '#2ca02c',
-    'seasonal': '#ff7f0e',
-    'resid': 'gray'
+    'Weighted Status': '#e3120b',
+    'Heritage Status': '#999999',
+    'Long Term Trend': '#2ca02c',
+    'Seasonal Trend': '#ff7f0e',
+    'Residual Trend': 'gray',
+    'Variation (weighted) - Smooth Status': '#9467bd',
+    'Variation (weighted) - Weighted Status': '#8c564b'
 }
 color_cycle = itertools.cycle(qualitative.Plotly + qualitative.Set2 + qualitative.Dark24)
 colors = {metric: base_colors.get(metric, next(color_cycle)) for metric in available_metrics}
